@@ -5,7 +5,6 @@ resource "cloudflare_record" "wordpress" {
   value   = aws_lb.main.dns_name
   type    = "CNAME"
   proxied = true
-  ttl     = 1
 
   comment = "WordPress site on AWS ECS"
 }
@@ -29,6 +28,6 @@ resource "cloudflare_page_rule" "cache_everything" {
 
   actions {
     cache_level = "cache_everything"
-    edge_cache_ttl = 7200
+    edge_cache_ttl = 86400  # 24 hours
   }
 }
