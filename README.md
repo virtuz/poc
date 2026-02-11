@@ -2,6 +2,14 @@
 
 This repository contains Infrastructure as Code (IaC) using Terraform to deploy a WordPress site on AWS ECS (Elastic Container Service) with Cloudflare as a CDN and DNS provider.
 
+## 🚀 CI/CD with GitHub Actions
+
+This repository includes automated CI/CD pipelines:
+- **Pull Requests**: Automatically runs `terraform plan` and posts results as PR comments
+- **Main Branch**: Automatically runs `terraform apply` when changes are merged
+
+See [GitHub Actions Documentation](.github/GITHUB_ACTIONS.md) for setup instructions and required secrets.
+
 ## Architecture
 
 The infrastructure includes:
