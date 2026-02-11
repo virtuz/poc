@@ -112,10 +112,13 @@ resource "aws_ecs_task_definition" "wordpress" {
         {
           name  = "WORDPRESS_DB_USER"
           value = var.db_username
-        },
+        }
+      ]
+      
+      secrets = [
         {
-          name  = "WORDPRESS_DB_PASSWORD"
-          value = var.db_password
+          name      = "WORDPRESS_DB_PASSWORD"
+          valueFrom = aws_secretsmanager_secret.db_password.arn
         }
       ]
       

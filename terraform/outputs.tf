@@ -22,6 +22,7 @@ output "rds_endpoint" {
 output "rds_address" {
   description = "RDS database address"
   value       = aws_db_instance.wordpress.address
+  sensitive   = true
 }
 
 output "efs_id" {
@@ -47,4 +48,9 @@ output "cloudflare_record" {
 output "wordpress_url" {
   description = "WordPress site URL"
   value       = "https://${var.subdomain}.${var.domain_name}"
+}
+
+output "aws_region" {
+  description = "AWS region where resources are deployed"
+  value       = var.aws_region
 }

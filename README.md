@@ -11,6 +11,7 @@ The infrastructure includes:
 - **AWS RDS MySQL**: Managed MySQL database for WordPress
 - **AWS EFS**: Elastic File System for persistent WordPress files
 - **AWS ALB**: Application Load Balancer for traffic distribution
+- **AWS Secrets Manager**: Secure storage for database credentials
 - **Cloudflare**: CDN, DNS, and DDoS protection
 
 ## Architecture Diagram
@@ -283,12 +284,13 @@ If you see 502 errors:
 
 ## Security Considerations
 
-1. **Database Password**: Use a strong, unique password
-2. **API Tokens**: Keep Cloudflare API tokens secure
-3. **SSL/TLS**: Use Cloudflare's SSL/TLS encryption
-4. **Updates**: Regularly update WordPress, themes, and plugins
-5. **Backups**: RDS automatic backups are enabled (7 days retention)
-6. **Secrets**: Consider using AWS Secrets Manager for sensitive values
+1. **Database Password**: Use a strong, unique password - it's stored securely in AWS Secrets Manager
+2. **Secrets Management**: Database credentials are stored in AWS Secrets Manager and injected securely into ECS tasks
+3. **API Tokens**: Keep Cloudflare API tokens secure and never commit them to version control
+4. **SSL/TLS**: Use Cloudflare's SSL/TLS encryption
+5. **Updates**: Regularly update WordPress, themes, and plugins
+6. **Backups**: RDS automatic backups are enabled (7 days retention)
+7. **Encryption**: RDS and EFS use encryption at rest
 
 ## Advanced Configuration
 
