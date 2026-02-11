@@ -37,9 +37,12 @@ This repository includes automated CI/CD pipelines for Terraform infrastructure 
 2. Sets up Terraform
 3. Configures AWS credentials
 4. Runs `terraform init` to initialize the working directory
-5. Runs `terraform apply -auto-approve` to apply the changes
+5. Runs `terraform plan` to create an execution plan
+6. Runs `terraform apply -auto-approve` to apply the changes from the plan
 
 **Purpose**: Automatically deploys approved infrastructure changes to AWS.
+
+**Security Note**: By default, the workflow applies changes automatically. For production environments, it's strongly recommended to enable GitHub environment protection rules to require manual approval before deployment. See the "Advanced Configuration" section for setup instructions.
 
 ## Required Secrets
 
@@ -214,27 +217,39 @@ terraform {
 4. **Rotate credentials regularly** (AWS keys, API tokens)
 5. **Use remote state backend** with encryption and locking
 6. **Review plan output** carefully before approving PRs
-7. **Enable workflow approval** for production environments
+7. **Enable environment protection** for production deployments (see Advanced Configuration)
 8. **Audit workflow runs** regularly in the Actions tab
+9. **Test in development environment** before applying to production
+10. **Monitor AWS CloudTrail** for unexpected infrastructure changes
 
 ## Advanced Configuration
 
-### Adding Manual Approval for Apply
+### Adding Manual Approval for Apply (STRONGLY RECOMMENDED)
+
+⚠️ **Important**: For production infrastructure, you should always require manual approval before terraform apply runs. This prevents unintended changes from being automatically deployed.
 
 To require manual approval before running terraform apply:
 
 1. Go to Settings → Environments
 2. Create a new environment (e.g., "production")
-3. Add required reviewers
-4. Update `terraform-apply.yml`:
+3. Add required reviewers (at least 1-2 people who understand infrastructure)
+4. Optionally set a wait timer (e.g., 5 minutes to allow time for review)
+5. In `terraform-apply.yml`, uncomment the environment line:
 
 ```yaml
 jobs:
   terraform-apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
-    environment: production  # Add this line
+    environment: production  # Uncomment this line
 ```
+
+After this configuration, every push to main will:
+1. Run terraform plan
+2. Pause and wait for a reviewer to approve
+3. Only run terraform apply after approval is granted
+
+This ensures no infrastructure changes are applied without human oversight.
 
 ### Running Workflows on Multiple Branches
 

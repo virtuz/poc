@@ -15,6 +15,9 @@ jobs:
   terraform-apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
+    # Uncomment the following line and configure a GitHub environment with protection rules
+    # to require manual approval before applying changes to production infrastructure
+    # environment: production
     
     defaults:
       run:
@@ -40,11 +43,16 @@ jobs:
         id: init
         run: terraform init
       
-      - name: Terraform Apply
-        id: apply
+      - name: Terraform Plan
+        id: plan
         run: |
-          terraform apply -auto-approve -input=false \
+          terraform plan -no-color -input=false \
             -var="db_password=${{ secrets.DB_PASSWORD }}" \
             -var="cloudflare_zone_id=${{ secrets.CLOUDFLARE_ZONE_ID }}" \
             -var="cloudflare_api_token=${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-            -var="domain_name=${{ vars.DOMAIN_NAME }}"
+            -var="domain_name=${{ vars.DOMAIN_NAME }}" \
+            -out=tfplan
+      
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve tfplan
