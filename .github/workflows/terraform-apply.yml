@@ -1,0 +1,50 @@
+name: Terraform Apply
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform-apply.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  terraform-apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./terraform
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.0.0
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+      
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      
+      - name: Terraform Apply
+        id: apply
+        run: |
+          terraform apply -auto-approve -input=false \
+            -var="db_password=${{ secrets.DB_PASSWORD }}" \
+            -var="cloudflare_zone_id=${{ secrets.CLOUDFLARE_ZONE_ID }}" \
+            -var="cloudflare_api_token=${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -var="domain_name=${{ vars.DOMAIN_NAME }}"
