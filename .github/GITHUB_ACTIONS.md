@@ -280,4 +280,4 @@ Create different variable sets in GitHub for different environments and referenc
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [Terraform GitHub Actions](https://github.com/hashicorp/setup-terraform)
 - [AWS Credentials Action](https://github.com/aws-actions/configure-aws-credentials)
-- [Terraform Best Practices](https://www.terraform.io/docs/cloud/guides/recommended-practices/index.html)
+- [Terraform Best Practices](https://developer.hashicorp.com/terraform/cloud-docs/recommended-practices)
