@@ -1,0 +1,25 @@
+# AWS Configuration
+aws_region         = "us-east-1"
+project_name       = "wordpress-ecs"
+environment        = "prod"
+availability_zones = ["us-east-1a", "us-east-1b"]
+
+# VPC Configuration
+vpc_cidr = "10.0.0.0/16"
+
+# Database Configuration
+db_name     = "wordpress"
+db_username = "wordpress"
+db_password = "your-secure-password-here"  # Change this!
+
+# WordPress Configuration
+wordpress_image         = "wordpress:latest"
+wordpress_cpu           = 512
+wordpress_memory        = 1024
+wordpress_desired_count = 2
+
+# Cloudflare Configuration
+cloudflare_zone_id  = "your-cloudflare-zone-id"      # Get from Cloudflare dashboard
+cloudflare_api_token = "your-cloudflare-api-token"   # Create in Cloudflare dashboard
+domain_name         = "example.com"                   # Your domain name
+subdomain           = "www"                           # Subdomain for WordPress (e.g., www, blog)
